@@ -1,0 +1,97 @@
+// General data card for listings
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.data-card {
+  background: $bg-light;
+  border-radius: $border-radius;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 4px solid $primary-color;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+
+  &__content {
+    p {
+      margin-bottom: 0.75rem;
+      color: $text-secondary;
+      word-break: break-all;
+
+      strong {
+        color: $text-primary;
+      }
+      span {
+        font-family: 'Courier New', Courier, monospace;
+        color: $secondary-color;
+      }
+    }
+    h3 {
+      color: $primary-color;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+}
+
+
+// Dashboard specific cards
+.dashboard-page {
+  .dashboard-intro {
+    font-size: 1.2rem;
+    color: $text-secondary;
+    max-width: 800px;
+    margin-bottom: 3rem;
+  }
+
+  .dashboard-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .dashboard-card {
+    display: block;
+    background: $bg-light;
+    padding: 2rem;
+    border-radius: $border-radius;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 4px solid $secondary-color;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba($secondary-color, 0.15);
+      border-left-color: $primary-color;
+    }
+
+    h3 {
+      color: $primary-color;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: $text-secondary;
+      font-size: 0.9rem;
+    }
+  }
+}

@@ -1,0 +1,47 @@
+.btn {
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: $border-radius;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background-color: $bg-lighter;
+  color: $text-secondary;
+  border: 2px solid $bg-lighter;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba($primary-color, 0.2);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+  }
+
+  &--primary {
+    background-color: $primary-color;
+    color: #fff;
+    border-color: $primary-color;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      border-color: darken($primary-color, 10%);
+    }
+  }
+
+  &--danger {
+    background-color: transparent;
+    color: $danger-color;
+    border-color: $danger-color;
+
+    &:hover {
+      background-color: $danger-color;
+      color: #fff;
+    }
+  }
+}
