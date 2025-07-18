@@ -10,13 +10,15 @@ import PlatformsPage from './pages/PlatformsPage';
 import TransactionsPage from './pages/TransactionsPage';
 import LotteryPage from './pages/LotteryPage';
 import LoginDevicesPage from './pages/LoginDevicesPage'; // <-- Import the new page
-import OsonConfigPage from './pages/OsonConfigPage'; // <-- Import the new page
+
 
 // Components
 import PrivateRoute from './components/Auth/PrivateRoute';
 import Navbar from './components/layout/Navbar';
 import AdminManagementPage from "./pages/AdminManagementPage";
 import CurrencyPage from "./pages/CurrencyPage";
+import OsonConfigsListPage from "./pages/OsonConfigPage";
+import OsonConfigDetailPage from "./pages/OsonConfigDetailPage";
 
 function App() {
     const { isAuthenticated } = useAuth();
@@ -32,7 +34,8 @@ function App() {
                     <Route path="/platforms" element={<PrivateRoute><PlatformsPage /></PrivateRoute>} />
                     <Route path="/transactions" element={<PrivateRoute><TransactionsPage /></PrivateRoute>} />
                     <Route path="/lottery" element={<PrivateRoute><LotteryPage /></PrivateRoute>} />
-                    <Route path="/oson-config" element={<PrivateRoute><OsonConfigPage /></PrivateRoute>} />
+                    <Route path="/oson-configs" element={<PrivateRoute><OsonConfigsListPage /></PrivateRoute>} />
+                    <Route path="/oson-configs/:id" element={<PrivateRoute><OsonConfigDetailPage /></PrivateRoute>} />
                     <Route path="/currency" element={<PrivateRoute><CurrencyPage /></PrivateRoute>} />
                     <Route path="/login-devices" element={<PrivateRoute><LoginDevicesPage /></PrivateRoute>} />
                     <Route path="/admins" element={<PrivateRoute><AdminManagementPage /></PrivateRoute>} />

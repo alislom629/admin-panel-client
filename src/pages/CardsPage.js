@@ -2,140 +2,195 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { cardService } from '../api/cardService';
-import CardForm from '../components/CardForm';
-import Modal from '../components/common/Modal';
-import Button from '../components/common/Button';
+import { osonConfigService } from '../api/osonConfigService'; // We need this for the "Add Card" modal
 import Loader from '../components/common/Loader';
-import { FiPlus, FiRefreshCw } from 'react-icons/fi';
+import Button from '../components/common/Button';
+import Modal from '../components/common/Modal';
+import { FiCreditCard, FiUser, FiDollarSign, FiStar, FiEdit, FiTrash2, FiPlusCircle, FiServer } from 'react-icons/fi';
 
 const CardsPage = () => {
+    // State for data
     const [cards, setCards] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isSyncing, setIsSyncing] = useState(false);
-    const [error, setError] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedCard, setSelectedCard] = useState(null);
+    const [osonConfigs, setOsonConfigs] = useState([]); // For the dropdown in the modal
 
-    const fetchCards = useCallback(async () => {
+    // State for UI
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    // State for Modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentCard, setCurrentCard] = useState(null);
+    const [selectedOsonConfigId, setSelectedOsonConfigId] = useState('');
+
+    // Fetch BOTH cards and oson configs when the page loads
+    const fetchData = useCallback(async () => {
         try {
-            const response = await cardService.getCards();
-            setCards(response.data);
-            setError(null);
+            setIsLoading(true);
+            setError('');
+            // Use Promise.all to fetch both sets of data concurrently for better performance
+            const [cardsResponse, configsResponse] = await Promise.all([
+                cardService.getCards(),
+                osonConfigService.getAllConfigs()
+            ]);
+            setCards(cardsResponse.data);
+            setOsonConfigs(configsResponse.data);
         } catch (err) {
-            setError('Kartalarni yuklashda xatolik. Iltimos, keyinroq qayta urining.');
+            setError('Failed to load page data. Please check your connection and try again.');
         } finally {
             setIsLoading(false);
         }
     }, []);
 
     useEffect(() => {
-        fetchCards();
-    }, [fetchCards]);
+        fetchData();
+    }, [fetchData]);
 
     const handleOpenModal = (card = null) => {
-        setSelectedCard(card);
+        if (card) {
+            // Editing an existing card
+            setCurrentCard(card);
+            setSelectedOsonConfigId(card.osonConfig.id); // Pre-select its current config
+        } else {
+            // Adding a new card
+            setCurrentCard({ cardNumber: '', ownerName: '', balance: 0 });
+            // Set default selection to the first available config, if any
+            if (osonConfigs.length > 0) {
+                setSelectedOsonConfigId(osonConfigs[0].id);
+            }
+        }
         setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        setSelectedCard(null);
+        setCurrentCard(null);
+        setSelectedOsonConfigId('');
     };
 
-    const handleSave = () => {
-        fetchCards();
-        handleCloseModal();
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setCurrentCard(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleDelete = async (cardId) => {
-        if (window.confirm('Haqiqatan ham ushbu kartani oʻchirmoqchimisiz?')) {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            if (currentCard.id) {
+                // This is an update
+                await cardService.updateCard(currentCard.id, currentCard);
+            } else {
+                // This is a new card
+                if (!selectedOsonConfigId) {
+                    alert('Please select an Oson Account for the new card.');
+                    return;
+                }
+                await cardService.createCard(selectedOsonConfigId, currentCard);
+            }
+            fetchData(); // Refetch all data to show the changes
+            handleCloseModal();
+        } catch (err) {
+            setError('Failed to save the card. Please check the details and try again.');
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (window.confirm('Are you sure you want to delete this card?')) {
             try {
-                await cardService.deleteCard(cardId);
-                fetchCards();
+                await cardService.deleteCard(id);
+                fetchData(); // Refetch to remove the card from the list
             } catch (err) {
-                alert('Kartani oʻchirishda xatolik.');
+                // Display the specific error from the backend (e.g., "Cannot delete last card")
+                alert(err.response?.data?.error || 'An unknown error occurred during deletion.');
             }
         }
     };
 
-    const handleSyncFromOson = async () => {
-        const isConfirmed = window.confirm(
-            "This will sync your cards with Oson Wallet.\n\n" +
-            "• New cards from Oson will be added.\n" +
-            "• Existing cards will be updated with the latest balance.\n\n" +
-            "This action does NOT delete cards from your local list that are no longer in Oson.\n\n" +
-            "Are you sure you want to proceed?"
-        );
-
-        if (isConfirmed) {
-            setIsSyncing(true);
-            setError(null);
-            try {
-                await cardService.syncCardsFromOson();
-
-                // --- MODIFIED: Simplified the success message ---
-                // The API no longer returns a walletBalance, so we just show a generic success message.
-                alert('Sync successful!');
-
-                // IMPORTANT: Re-fetch the cards from our own DB to get the updated list.
-                await fetchCards();
-
-            } catch (err) {
-                const errorMessage = err.response?.data?.error || 'Failed to sync from Oson. Please try again.';
-                setError(errorMessage);
-            } finally {
-                setIsSyncing(false);
-            }
-        }
-    };
+    if (isLoading) return <Loader />;
 
     return (
         <div className="page-container">
             <div className="page-header">
-                <h1>Kartalarni Boshqarish</h1>
-                <div className="page-header__actions">
-                    <Button onClick={handleSyncFromOson} disabled={isSyncing || isLoading}>
-                        <FiRefreshCw className={isSyncing ? 'spin' : ''} />
-                        {isSyncing ? 'Syncing...' : 'Sync from Oson'}
-                    </Button>
-                    <Button primary onClick={() => handleOpenModal()}>
-                        <FiPlus /> Yangi Karta
-                    </Button>
-                </div>
+                <h1>All Admin Cards</h1>
+                <Button primary onClick={() => handleOpenModal()}>
+                    <FiPlusCircle /> Add New Card
+                </Button>
             </div>
 
-            {(isLoading || isSyncing) && <Loader />}
             {error && <p className="error-message">{error}</p>}
 
-            {!isLoading && !error && (
-                <div className="card-grid">
-                    {cards.length > 0 ? (
-                        cards.map(card => (
-                            <div key={card.id} className="data-card">
-                                <div className="data-card__content">
-                                    <p><strong>Egasi:</strong> {card.ownerName || 'Noma\'lum'}</p>
-                                    <p><strong>Karta raqami:</strong> <span>{card.cardNumber.replace(/(\d{4})/g, '$1 ').trim()}</span></p>
-                                    <p><strong>Muddati:</strong> {card.expireDate || 'N/A'}</p>
-                                    <p className="data-card__balance">
-                                        <strong>Balans: </strong>
-                                        <span>{(card.balance / 100).toFixed(2)} UZS</span>
-                                    </p>
-                                </div>
-                                <div className="data-card__actions">
-                                    <Button onClick={() => handleOpenModal(card)}>Tahrirlash</Button>
-                                    <Button danger onClick={() => handleDelete(card.id)}>Oʻchirish</Button>
+            <div className="cards-grid">
+                {cards.map(card => (
+                    <div key={card.id} className={`admin-card ${card.osonConfig.primaryConfig ? 'primary-account' : ''}`}>
+                        {card.osonConfig.primaryConfig && <div className="primary-indicator"><FiStar /> Primary Account Card</div>}
+
+                        <div className="admin-card-body">
+                            <div className="card-info-item">
+                                <FiCreditCard />
+                                <div className="card-info-text">
+                                    <span>Card Number</span>
+                                    <p>{card.cardNumber.replace(/(\d{4})/g, '$1 ').trim()}</p>
                                 </div>
                             </div>
-                        ))
-                    ) : (
-                        <p>Kartalar topilmadi. Oson bilan sinxronlang yoki yangi karta qo'shing.</p>
-                    )}
-                </div>
-            )}
+                            <div className="card-info-item">
+                                <FiUser />
+                                <div className="card-info-text">
+                                    <span>Owner Name</span>
+                                    <p>{card.ownerName || 'N/A'}</p>
+                                </div>
+                            </div>
+                            <div className="card-info-item">
+                                <FiDollarSign />
+                                <div className="card-info-text">
+                                    <span>Balance</span>
+                                    <p>{card.balance.toLocaleString('en-US')}</p>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div className="admin-card-footer">
+                            <div className="account-info">
+                                <FiServer />
+                                <span>Belongs to: <strong>{card.osonConfig.deviceName}</strong></span>
+                            </div>
+                            <div className="card-actions">
+                                <Button onClick={() => handleOpenModal(card)}><FiEdit size={14}/></Button>
+                                <Button danger onClick={() => handleDelete(card.id)}><FiTrash2 size={14}/></Button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* --- Add/Edit Card Modal --- */}
             <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                <h2>{selectedCard ? 'Kartani Tahrirlash' : 'Yangi Karta Qo\'shish'}</h2>
-                <CardForm card={selectedCard} onSave={handleSave} onCancel={handleCloseModal} />
+                <h2>{currentCard?.id ? 'Edit Card' : 'Add New Card'}</h2>
+                <form onSubmit={handleSubmit} className="form modal-form">
+                    {/* Oson Account Selector (only for new cards) */}
+                    {!currentCard?.id && (
+                        <div className="form__group">
+                            <label htmlFor="osonConfig">Oson Account</label>
+                            <select id="osonConfig" value={selectedOsonConfigId} onChange={(e) => setSelectedOsonConfigId(e.target.value)} required>
+                                {osonConfigs.map(config => (
+                                    <option key={config.id} value={config.id}>
+                                        {config.deviceName} {config.primaryConfig && '(Primary)'}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+
+                    <div className="form__group">
+                        <label htmlFor="cardNumber">Card Number (16 digits)</label>
+                        <input type="text" id="cardNumber" name="cardNumber" value={currentCard?.cardNumber || ''} onChange={handleInputChange} required pattern="\d{16}" maxLength="16" />
+                    </div>
+                    <div className="form__group">
+                        <label htmlFor="ownerName">Owner Name</label>
+                        <input type="text" id="ownerName" name="ownerName" value={currentCard?.ownerName || ''} onChange={handleInputChange} />
+                    </div>
+                    <Button type="submit" primary>
+                        {currentCard?.id ? 'Save Changes' : 'Add Card'}
+                    </Button>
+                </form>
             </Modal>
         </div>
     );

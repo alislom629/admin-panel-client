@@ -1,38 +1,20 @@
 // src/api/osonConfigService.js
-
 import apiService from './apiService';
 
 const API_URL = '/oson/config';
 
-/**
- * Fetches the current Oson configuration.
- * @returns {Promise}
- */
-const getOsonConfig = () => apiService.get(API_URL);
-
-/**
- * Creates the Oson configuration for the first time.
- * @param {object} configData - The configuration object.
- * @returns {Promise}
- */
-const saveOsonConfig = (configData) => apiService.post(API_URL, configData);
-
-/**
- * Updates the existing Oson configuration.
- * @param {object} configData - The configuration object.
- * @returns {Promise}
- */
-const updateOsonConfig = (configData) => apiService.put(API_URL, configData);
-
-/**
- * Deletes the Oson configuration.
- * @returns {Promise}
- */
-const deleteOsonConfig = () => apiService.delete(API_URL);
+const getAllConfigs = () => apiService.get(API_URL);
+const getConfig = (id) => apiService.get(`${API_URL}/${id}`); // <-- ADD THIS
+const saveConfig = (configData) => apiService.post(API_URL, configData);
+const updateConfig = (id, configData) => apiService.put(`${API_URL}/${id}`, configData);
+const deleteConfig = (id) => apiService.delete(`${API_URL}/${id}`);
+const setPrimary = (id) => apiService.put(`${API_URL}/${id}/set-primary`);
 
 export const osonConfigService = {
-    getOsonConfig,
-    saveOsonConfig,
-    updateOsonConfig,
-    deleteOsonConfig,
+    getAllConfigs,
+    getConfig,
+    saveConfig,
+    updateConfig,
+    deleteConfig,
+    setPrimary,
 };

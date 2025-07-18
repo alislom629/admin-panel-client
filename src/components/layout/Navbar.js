@@ -30,7 +30,7 @@ const Navbar = () => {
                 <NavLink to="/login-devices" onClick={() => setIsOpen(false)}>Kirishlar Tarixi</NavLink>
                 <NavLink to="/admins" onClick={() => setIsOpen(false)}>Adminlar</NavLink>
                 <NavLink to="/currency" onClick={() => setIsOpen(false)}>Valyuta Kurslari</NavLink>
-                <NavLink to="/oson-config" onClick={() => setIsOpen(false)}>Oson Sozlamalari</NavLink>
+                <NavLink to="/oson-configs" onClick={() => setIsOpen(false)}>Oson Configs</NavLink>
 
                 {/* Translated Button */}
                 <button onClick={logout} className="navbar__logout">Chiqish</button>

@@ -36,7 +36,35 @@ const DashboardPage = () => {
     const [filterPeriod, setFilterPeriod] = useState('30d');
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true);
+            setError('');
 
+            let params = {};
+            if (filterPeriod === 'custom' && startDate && endDate) {
+                params = {
+                    startDate: format(startDate, "yyyy-MM-dd'T'00:00:00"),
+                    endDate: format(endDate, "yyyy-MM-dd'T'23:59:59"),
+                };
+            } else if (filterPeriod !== 'all' && filterPeriod !== 'custom') {
+                const days = parseInt(filterPeriod.replace('d', ''));
+                params = { startDate: format(subDays(new Date(), days), "yyyy-MM-dd'T'00:00:00") };
+            }
+
+            try {
+                const response = await dashboardService.getDashboardStats(params);
+                setStats(response.data);
+            } catch (err) {
+                console.error("Failed to fetch dashboard data:", err);
+                setError("Ma'lumotlarni yuklashda xatolik yuz berdi.");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);

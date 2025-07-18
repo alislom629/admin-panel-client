@@ -1852,3 +1852,360 @@ hr {
     }
   }
 }
+// src/styles/main.scss
+
+// ... (your existing styles for .oson-card, etc.)
+
+// Styles for the Quick Paste section inside the modal
+.quick-paste-section {
+  background-color: $bg-color;
+  padding: 1rem;
+  border-radius: $border-radius;
+  margin-bottom: 2rem;
+  border: 1px dashed $border-color;
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: $primary-color;
+  }
+
+  .form__group {
+    margin-bottom: 1rem;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 80px;
+    background-color: $bg-light;
+    color: $text-primary;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    padding: 0.5rem;
+  }
+}
+
+// Style for password toggle button if not already present
+.password-input-container {
+  position: relative;
+  .password-toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: $text-secondary;
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+}
+
+// Highlight the primary card row in the table
+.transaction-table {
+  tbody tr.is-primary-row {
+    background-color: rgba($secondary-color, 0.1);
+    td:first-child svg {
+      color: $secondary-color;
+      font-size: 1.2rem;
+    }
+  }
+}
+// src/styles/main.scss
+
+// ... (your existing oson-card styles are good)
+
+// Style for highlighting the primary row in the cards table
+.transaction-table tbody tr.is-primary-row {
+  background-color: rgba($secondary-color, 0.1);
+  border-left: 3px solid $secondary-color; // A subtle left border
+}
+
+// A small icon next to the account name in the table
+.primary-icon-inline {
+  color: $secondary-color;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+// Styles for the config detail/form page
+.config-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: $bg-light;
+  padding: 2rem;
+  border-radius: $border-radius;
+}
+// src/styles/main.scss
+
+// ... (your existing oson-card styles are good)
+
+// Style for highlighting the primary row in the cards table
+.transaction-table tbody tr.is-primary-row {
+  background-color: rgba($secondary-color, 0.1);
+  border-left: 3px solid $secondary-color; // A subtle left border
+}
+
+// A small icon next to the account name in the table
+.primary-icon-inline {
+  color: $secondary-color;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+// Styles for the config detail/form page
+.config-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: $bg-light;
+  padding: 2rem;
+  border-radius: $border-radius;
+}
+// src/styles/main.scss
+
+// ===============================================
+// Professional Styles for Oson Configs Page
+// ===============================================
+
+// 1. The main grid container for the cards
+// This creates a responsive layout that automatically adjusts the number of columns.
+.oson-config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+// 2. The individual Oson Config card
+.oson-card {
+  // --- Structure & Layout ---
+  display: flex;
+  flex-direction: column;
+  position: relative; // Crucial for positioning the "PRIMARY" badge
+  overflow: hidden; // Keeps the design clean if elements ever overflow
+
+  // --- Appearance & Spacing ---
+  background-color: $bg-light;
+  border-radius: $border-radius;
+  border: 1px solid $border-color;
+  padding: 1.5rem;
+
+  // --- Interaction & Feedback ---
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  // 3. Modifier for the PRIMARY card
+  &.primary {
+    border-color: $secondary-color;
+    box-shadow: 0 0 20px rgba($secondary-color, 0.2);
+
+    // An alternative or additional highlight
+    // border-left: 4px solid $secondary-color;
+  }
+}
+
+// 4. The "PRIMARY" badge in the top-right corner
+.primary-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: $secondary-color;
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem; // Space between the star icon and text
+  z-index: 10;
+}
+
+// 5. The header section of the card
+.oson-card-header {
+  border-bottom: 1px solid $border-color;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+
+  h3 {
+    margin: 0;
+    color: $text-primary;
+    font-size: 1.25rem;
+  }
+
+  p {
+    margin: 0.25rem 0 0;
+    color: $text-secondary;
+    font-size: 0.9rem;
+  }
+}
+
+// 6. The main content/body of the card
+.oson-card-body {
+  flex-grow: 1; // This is a key property: it pushes the actions to the bottom
+
+  p {
+    margin: 0.25rem 0;
+    font-size: 1rem;
+  }
+
+  strong {
+    color: $text-secondary;
+  }
+}
+
+// 7. The container for the action buttons at the bottom
+.oson-card-actions {
+  display: flex;
+  flex-wrap: wrap; // Allows buttons to stack on smaller widths
+  gap: 0.75rem;
+  margin-top: 1.5rem; // Pushes it away from the body content
+
+  // Ensure all buttons and links are styled consistently
+  .btn, a > .btn {
+    flex-grow: 1; // Makes buttons share space nicely
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; // Space between icon and text in buttons
+  }
+
+  // Make the primary action stand out more if needed
+  a > .btn {
+    // You can add specific styles for the "Edit" button if you want
+  }
+}
+// src/styles/main.scss
+
+// ===============================================
+// Professional Styles for the Admin Cards Page
+// ===============================================
+
+// 1. The main responsive grid for the cards
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+// 2. The individual Admin Card component
+.admin-card {
+  background-color: $bg-light;
+  border-radius: $border-radius;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden; // Important for the primary indicator
+  border: 1px solid $border-color;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    border-color: $primary-color;
+  }
+
+  // 3. Highlight style for cards belonging to the PRIMARY Oson account
+  &.primary-account {
+    border-color: $secondary-color;
+    // A subtle glow effect for the primary cards
+    box-shadow: 0 0 15px rgba($secondary-color, 0.2);
+  }
+}
+
+// 4. The "Primary Account Card" indicator ribbon
+.primary-indicator {
+  position: absolute;
+  top: 10px;
+  right: -35px;
+  background-color: $secondary-color;
+  color: #fff;
+  padding: 5px 40px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  transform: rotate(45deg);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+// 5. The main body of the card containing the info items
+.admin-card-body {
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  flex-grow: 1;
+}
+
+.card-info-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  // Add spacing between items
+  &:not(:last-child) {
+    margin-bottom: 1.25rem;
+  }
+
+  // Icon styling
+  svg {
+    font-size: 1.5rem;
+    color: $primary-color;
+    flex-shrink: 0;
+  }
+}
+
+.card-info-text {
+  span {
+    display: block;
+    font-size: 0.8rem;
+    color: $text-secondary;
+    margin-bottom: 0.1rem;
+  }
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $text-primary;
+    letter-spacing: 0.5px;
+  }
+}
+
+// 6. The footer of the card for context and actions
+.admin-card-footer {
+  background-color: $bg-lighter;
+  border-top: 1px solid $border-color;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.account-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: $text-secondary;
+
+  svg {
+    color: $text-secondary;
+  }
+
+  strong {
+    color: $text-primary;
+  }
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+
+  // Make the action buttons small and compact
+  .btn {
+    padding: 0.4rem;
+    line-height: 1; // Ensures icon is centered vertically
+  }
+}
