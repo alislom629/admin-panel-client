@@ -1811,3 +1811,44 @@ hr {
   margin-bottom: 1.5rem;
   text-align: left;
 }
+// src/styles/main.scss
+
+// ... (all your existing styles)
+
+
+// ===============================================
+// Styles for Cards Page Enhancements
+// ===============================================
+
+// Make page header actions responsive
+.page-header {
+  &__actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap; // Allows buttons to stack on small screens
+  }
+}
+
+// Add a spinning animation for the sync icon
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+// Style the new balance display on the card
+.data-card {
+  &__balance {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid $border-color;
+
+    span {
+      color: $secondary-color;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+  }
+}

@@ -6,10 +6,12 @@ import CardForm from '../components/CardForm';
 import Modal from '../components/common/Modal';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
+import { FiPlus, FiRefreshCw } from 'react-icons/fi';
 
 const CardsPage = () => {
     const [cards, setCards] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSyncing, setIsSyncing] = useState(false);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
@@ -45,11 +47,9 @@ const CardsPage = () => {
         handleCloseModal();
     };
 
-    const handleDelete = async (cardId) => { // <-- Endi butun 'card' obyekti emas, faqat 'id' kerak
-        // "Asosiy kartani o'chira olmaysiz" degan mantiq olib tashlandi
+    const handleDelete = async (cardId) => {
         if (window.confirm('Haqiqatan ham ushbu kartani oʻchirmoqchimisiz?')) {
             try {
-                // <-- Endi 'card.id' o'rniga to'g'ridan-to'g'ri 'cardId' ishlatiladi
                 await cardService.deleteCard(cardId);
                 fetchCards();
             } catch (err) {
@@ -58,41 +58,77 @@ const CardsPage = () => {
         }
     };
 
-    // handleSetMain funksiyasi butunlay o'chirildi
-    // <-- O'CHIRILDI
+    const handleSyncFromOson = async () => {
+        const isConfirmed = window.confirm(
+            "This will sync your cards with Oson Wallet.\n\n" +
+            "• New cards from Oson will be added.\n" +
+            "• Existing cards will be updated with the latest balance.\n\n" +
+            "This action does NOT delete cards from your local list that are no longer in Oson.\n\n" +
+            "Are you sure you want to proceed?"
+        );
+
+        if (isConfirmed) {
+            setIsSyncing(true);
+            setError(null);
+            try {
+                await cardService.syncCardsFromOson();
+
+                // --- MODIFIED: Simplified the success message ---
+                // The API no longer returns a walletBalance, so we just show a generic success message.
+                alert('Sync successful!');
+
+                // IMPORTANT: Re-fetch the cards from our own DB to get the updated list.
+                await fetchCards();
+
+            } catch (err) {
+                const errorMessage = err.response?.data?.error || 'Failed to sync from Oson. Please try again.';
+                setError(errorMessage);
+            } finally {
+                setIsSyncing(false);
+            }
+        }
+    };
 
     return (
         <div className="page-container">
             <div className="page-header">
                 <h1>Kartalarni Boshqarish</h1>
-                <Button primary onClick={() => handleOpenModal()}>+ Yangi Karta Qo'shish</Button>
+                <div className="page-header__actions">
+                    <Button onClick={handleSyncFromOson} disabled={isSyncing || isLoading}>
+                        <FiRefreshCw className={isSyncing ? 'spin' : ''} />
+                        {isSyncing ? 'Syncing...' : 'Sync from Oson'}
+                    </Button>
+                    <Button primary onClick={() => handleOpenModal()}>
+                        <FiPlus /> Yangi Karta
+                    </Button>
+                </div>
             </div>
 
-            {isLoading && <Loader />}
+            {(isLoading || isSyncing) && <Loader />}
             {error && <p className="error-message">{error}</p>}
 
             {!isLoading && !error && (
                 <div className="card-grid">
                     {cards.length > 0 ? (
                         cards.map(card => (
-                            // <-- Maxsus 'data-card--main' klassi olib tashlandi
                             <div key={card.id} className="data-card">
-                                {/* <-- "ASOSIY" tasmasi (ribbon) olib tashlandi */}
                                 <div className="data-card__content">
-                                    <p><strong>Egasi:</strong> {card.ownerName}</p>
+                                    <p><strong>Egasi:</strong> {card.ownerName || 'Noma\'lum'}</p>
                                     <p><strong>Karta raqami:</strong> <span>{card.cardNumber.replace(/(\d{4})/g, '$1 ').trim()}</span></p>
-                                    <p><strong>Muddati:</strong> {card.expireDate}</p>
+                                    <p><strong>Muddati:</strong> {card.expireDate || 'N/A'}</p>
+                                    <p className="data-card__balance">
+                                        <strong>Balans: </strong>
+                                        <span>{(card.balance / 100).toFixed(2)} UZS</span>
+                                    </p>
                                 </div>
                                 <div className="data-card__actions">
-                                    {/* <-- "Asosiy qilish" tugmasi olib tashlandi */}
                                     <Button onClick={() => handleOpenModal(card)}>Tahrirlash</Button>
-                                    {/* <-- O'chirish tugmasidan 'disabled' holati olib tashlandi */}
                                     <Button danger onClick={() => handleDelete(card.id)}>Oʻchirish</Button>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <p>Kartalar topilmadi. Boshlash uchun yangi karta qo'shing.</p>
+                        <p>Kartalar topilmadi. Oson bilan sinxronlang yoki yangi karta qo'shing.</p>
                     )}
                 </div>
             )}

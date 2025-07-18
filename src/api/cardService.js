@@ -1,5 +1,4 @@
-// src/api/cardService.js (This should be the name of your file)
-// If you don't have this file, create it based on the initial prompt.
+// src/api/cardService.js
 
 import apiService from './apiService';
 
@@ -10,14 +9,13 @@ const getCard = (id) => apiService.get(`${API_URL}/${id}`);
 const createCard = (cardData) => apiService.post(API_URL, cardData);
 const updateCard = (id, cardData) => apiService.put(`${API_URL}/${id}`, cardData);
 const deleteCard = (id) => apiService.delete(`${API_URL}/${id}`);
-
-// 👇 ADD THIS NEW FUNCTION
-/**
- * Sets a specific card as the main card.
- * @param {number} id - The ID of the card to set as main.
- * @returns {Promise}
- */
 const setMainCard = (id) => apiService.put(`${API_URL}/${id}/set-main`);
+
+/**
+ * Triggers the backend to fetch cards & balance from Oson and save them.
+ * @returns {Promise} A promise that resolves with the sync result, including wallet balance.
+ */
+const syncCardsFromOson = () => apiService.get('/admin/cards-and-wallet');
 
 
 export const cardService = {
@@ -26,5 +24,6 @@ export const cardService = {
     createCard,
     updateCard,
     deleteCard,
-    setMainCard, // <-- Export the new function
+    setMainCard,
+    syncCardsFromOson, // <-- Export the new function
 };
