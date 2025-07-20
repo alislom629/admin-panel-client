@@ -193,7 +193,7 @@ const TransactionsPage = () => {
                                 <td>{t.platform}</td>
                                 <td>{t.fullName || `ChatID: ${t.chatId}`}</td>
                                 <td>...{t.cardNumber?.slice(-4)}</td>
-                                <td>{t.amount}</td>
+                                <td>{t.uniqueAmount}</td>
                                 <td>{t.type}</td>
                                 <td><StatusBadge status={t.status} /></td>
                                 <td>{new Date(t.createdAt).toLocaleString()}</td>
