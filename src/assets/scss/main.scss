@@ -2355,3 +2355,140 @@ hr {
     }
   }
 }
+// src/styles/components/_Navbar.scss OR main.scss
+
+// ... (existing .navbar styles)
+
+.navbar {
+  // ... existing styles ...
+
+  &__links {
+    // ... existing styles ...
+    // Modified to use a wrapper for consistent spacing
+    gap: 0;
+  }
+
+  // NEW: A wrapper for nav items to handle spacing
+  &__item {
+    padding: 0 1rem; // This now controls the spacing
+  }
+
+  // NEW: Styles for the Dropdown Component
+  .dropdown {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    &__toggle {
+      background: none;
+      border: none;
+      color: $text-secondary;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      height: 100%;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $text-primary;
+      }
+    }
+
+    &__chevron {
+      transition: transform 0.2s ease-in-out;
+      &.open {
+        transform: rotate(180deg);
+      }
+    }
+
+    &__menu {
+      position: absolute;
+      top: calc(100% + 10px); // Position below the navbar with a small gap
+      left: 0;
+      background: $bg-lighter;
+      border-radius: $border-radius;
+      padding: 0.5rem 0;
+      min-width: 220px;
+      z-index: 1100;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      border: 1px solid $border-color;
+      animation: slide-fade-down 0.2s ease-out;
+
+      a {
+        display: block;
+        padding: 0.75rem 1.5rem;
+        color: $text-secondary;
+        white-space: nowrap; // Prevent links from wrapping
+
+        &:hover,
+        &.active {
+          background-color: $primary-color;
+          color: #fff;
+        }
+
+        // Remove the bottom border from NavLink's default style
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @include mobile {
+    &__item {
+      padding: 0; // Remove horizontal padding on mobile
+      width: 100%;
+      text-align: center;
+    }
+
+    .dropdown {
+      flex-direction: column;
+      width: 100%;
+
+      &__toggle {
+        padding: 1rem 0;
+      }
+
+      &__menu {
+        position: static; // No absolute positioning on mobile
+        background: none;
+        box-shadow: none;
+        border: none;
+        width: 100%;
+        padding: 0;
+        animation: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        a {
+          padding: 0.75rem 0;
+          color: $text-secondary;
+
+          &:hover,
+          &.active {
+            background: none;
+            color: $primary-color;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Add this animation if you don't have one like it
+@keyframes slide-fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
