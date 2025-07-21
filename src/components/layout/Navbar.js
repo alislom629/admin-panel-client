@@ -31,6 +31,7 @@ const Navbar = () => {
                 <NavLink to="/admins" onClick={() => setIsOpen(false)}>Adminlar</NavLink>
                 <NavLink to="/currency" onClick={() => setIsOpen(false)}>Valyuta Kurslari</NavLink>
                 <NavLink to="/oson-configs" onClick={() => setIsOpen(false)}>Oson Configs</NavLink>
+                <NavLink to="/broadcast" onClick={() => setIsOpen(false)}>Broadcast</NavLink>
 
                 {/* Translated Button */}
                 <button onClick={logout} className="navbar__logout">Chiqish</button>

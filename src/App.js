@@ -19,6 +19,7 @@ import AdminManagementPage from "./pages/AdminManagementPage";
 import CurrencyPage from "./pages/CurrencyPage";
 import OsonConfigsListPage from "./pages/OsonConfigPage";
 import OsonConfigDetailPage from "./pages/OsonConfigDetailPage";
+import BroadcastPage from "./pages/BroadcastPage";
 
 function App() {
     const { isAuthenticated } = useAuth();
@@ -39,6 +40,7 @@ function App() {
                     <Route path="/currency" element={<PrivateRoute><CurrencyPage /></PrivateRoute>} />
                     <Route path="/login-devices" element={<PrivateRoute><LoginDevicesPage /></PrivateRoute>} />
                     <Route path="/admins" element={<PrivateRoute><AdminManagementPage /></PrivateRoute>} />
+                    <Route path="/broadcast" element={<PrivateRoute><BroadcastPage /></PrivateRoute>} />
 
                     <Route path="*" element={<Navigate to={isAuthenticated ? "/" : "/login"} />} />
                 </Routes>
