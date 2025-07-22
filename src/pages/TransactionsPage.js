@@ -7,7 +7,17 @@ import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import { FaTrash, FaFilter, FaTimes } from 'react-icons/fa'; // Added FaTimes for the clear button
 
-const requestStatuses = ["PENDING", "PENDING_SMS", "PENDING_ADMIN","BONUS_APPROVED", "APPROVED", "CANCELED", "PENDING_PAYMENT", "FAILED"];
+const requestStatuses = [
+    "PENDING",
+    "PENDING_SMS",
+    "PENDING_ADMIN",
+    "APPROVED",
+    "BONUS_APPROVED",
+    "CANCELED",
+    "PENDING_PAYMENT",
+    "FAILED",
+    "PENDING_SCREENSHOT"
+];
 const requestTypes = ["TOP_UP", "WITHDRAWAL"];
 
 const TransactionsPage = () => {
