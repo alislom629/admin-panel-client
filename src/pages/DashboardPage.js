@@ -10,12 +10,14 @@ import "react-datepicker/dist/react-datepicker.css";
 // Import Chart.js and React wrapper
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Filler, Title } from 'chart.js';
 import { Doughnut, Bar, Line } from 'react-chartjs-2';
-import { FiTrendingUp, FiCheckCircle, FiDollarSign, FiUsers, FiArrowUpCircle, FiArrowDownCircle } from 'react-icons/fi';
+
+// 1. IMPORT the new 'FiAward' icon for the bonus card
+import { FiTrendingUp, FiArrowUpCircle, FiArrowDownCircle, FiUsers, FiAward } from 'react-icons/fi';
 
 // Register all the Chart.js components we'll use
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Filler, Title);
 
-// Reusable Stat Card component
+// Reusable Stat Card component (no changes needed here)
 const StatCard = ({ icon, title, value, detail, color }) => (
     <div className="stat-card-v2" style={{ borderBottomColor: color }}>
         <div className="stat-card-v2__icon" style={{ color }}>{icon}</div>
@@ -36,6 +38,7 @@ const DashboardPage = () => {
     const [filterPeriod, setFilterPeriod] = useState('30d');
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
+
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
@@ -53,37 +56,20 @@ const DashboardPage = () => {
             }
 
             try {
-                const response = await dashboardService.getDashboardStats(params);
-                setStats(response.data);
-            } catch (err) {
-                console.error("Failed to fetch dashboard data:", err);
-                setError("Ma'lumotlarni yuklashda xatolik yuz berdi.");
-            } finally {
-                setIsLoading(false);
-            }
-        };
+                // 2. FETCH BOTH STATS AND BONUS AMOUNT IN PARALLEL
+                const [statsResponse, bonusResponse] = await Promise.all([
+                    dashboardService.getDashboardStats(params),
+                    dashboardService.getTotalApprovedBonusAmount(params)
+                ]);
 
-        fetchData();
-    }, []);
-    useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true);
-            setError('');
-
-            let params = {};
-            if (filterPeriod === 'custom' && startDate && endDate) {
-                params = {
-                    startDate: format(startDate, "yyyy-MM-dd'T'00:00:00"),
-                    endDate: format(endDate, "yyyy-MM-dd'T'23:59:59"),
+                // 3. COMBINE THE RESULTS INTO ONE OBJECT
+                const combinedStats = {
+                    ...statsResponse.data, // All data from the main stats endpoint
+                    totalApprovedBonusAmount: bonusResponse.data // Add the bonus amount
                 };
-            } else if (filterPeriod !== 'all' && filterPeriod !== 'custom') {
-                const days = parseInt(filterPeriod.replace('d', ''));
-                params = { startDate: format(subDays(new Date(), days), "yyyy-MM-dd'T'00:00:00") };
-            }
 
-            try {
-                const response = await dashboardService.getDashboardStats(params);
-                setStats(response.data);
+                setStats(combinedStats);
+
             } catch (err) {
                 console.error("Failed to fetch dashboard data:", err);
                 setError("Ma'lumotlarni yuklashda xatolik yuz berdi.");
@@ -95,13 +81,13 @@ const DashboardPage = () => {
         fetchData();
     }, [filterPeriod, dateRange]);
 
+
     const handleFilterChange = (period) => {
         setFilterPeriod(period);
         if (period !== 'custom') setDateRange([null, null]);
     };
 
-    // --- Chart Configurations ---
-
+    // --- Chart Configurations (no changes needed) ---
     const requestsByDateChartData = {
         labels: stats?.requestsByDate ? Object.keys(stats.requestsByDate).sort() : [],
         datasets: [{
@@ -114,27 +100,16 @@ const DashboardPage = () => {
         }],
     };
 
-    // =================================================================================
-    // THE FIX IS HERE: Updated to use lowercase 'withdrawal' and 'top_up' keys
-    // =================================================================================
     const platformGraphLabels = stats?.platformGraphData ? Object.keys(stats.platformGraphData) : [];
     const platformGraphData = {
         labels: platformGraphLabels,
         datasets: [
-            {
-                label: 'To\'ldirilgan (Top-up)',
-                data: platformGraphLabels.map(p => stats.platformGraphData[p]['top_up'] || 0), // <-- FIXED
-                backgroundColor: '#53bf9d',
-            },
-            {
-                label: 'Yechib olingan (Withdrawal)',
-                data: platformGraphLabels.map(p => stats.platformGraphData[p]['withdrawal'] || 0), // <-- FIXED
-                backgroundColor: '#e94560',
-            },
+            { label: 'To\'ldirilgan (Top-up)', data: platformGraphLabels.map(p => stats.platformGraphData[p]['top_up'] || 0), backgroundColor: '#53bf9d' },
+            { label: 'Yechib olingan (Withdrawal)', data: platformGraphLabels.map(p => stats.platformGraphData[p]['withdrawal'] || 0), backgroundColor: '#e94560' },
         ],
     };
 
-    const STATUS_COLORS = { APPROVED: '#53bf9d', PENDING: '#fca130', PENDING_ADMIN: '#fca130', PENDING_SMS: '#fca130', PENDING_PAYMENT: '#fca130', FAILED: '#ff5c5c', CANCELED: '#6c757d', default: '#16213e' };
+    const STATUS_COLORS = { APPROVED: '#53bf9d', PENDING: '#fca130', PENDING_ADMIN: '#fca130', PENDING_SMS: '#fca130', PENDING_PAYMENT: '#fca130', FAILED: '#ff5c5c', CANCELED: '#6c757d', BONUS_APPROVED: '#9b59b6', default: '#16213e' };
     const statusLabels = stats?.statusDistribution ? Object.keys(stats.statusDistribution) : [];
     const statusChartData = {
         labels: statusLabels,
@@ -148,15 +123,13 @@ const DashboardPage = () => {
     };
 
     const chartOptions = (title) => ({
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, maintainAspectRatio: false,
         plugins: { legend: { position: 'top', labels: { color: '#e0e0e0' } }, title: { display: true, text: title, color: '#e0e0e0', font: { size: 16 } } },
         scales: { y: { stacked: true, ticks: { color: '#a0a0a0' }, grid: { color: '#333' } }, x: { stacked: true, ticks: { color: '#a0a0a0' }, grid: { color: 'transparent' } } },
     });
 
     const donutChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, maintainAspectRatio: false,
         plugins: {
             title: { display: true, text: "Statuslar Taqsimoti", color: '#e0e0e0', font: { size: 20, weight: 'bold' } },
             legend: { position: 'bottom', labels: { color: '#e0e0e0', padding: 20, font: { size: 14 } } }
@@ -180,9 +153,11 @@ const DashboardPage = () => {
                 </div>
             </header>
 
+            {/* 4. ADD THE NEW BONUS CARD TO THE GRID */}
             <div className="stats-grid">
                 <StatCard icon={<FiArrowDownCircle/>} title="Jami Yechilgan" value={`${stats.totalApprovedWithdrawalAmount?.toLocaleString('uz-UZ') || 0} so'm`} detail="Tasdiqlangan" color="#e94560" />
                 <StatCard icon={<FiArrowUpCircle/>} title="Jami To'ldirilgan" value={`${stats.totalApprovedTopUpAmount?.toLocaleString('uz-UZ') || 0} so'm`} detail="Tasdiqlangan" color="#53bf9d" />
+                <StatCard icon={<FiAward />} title="Jami Bonus" value={`${stats.totalApprovedBonusAmount?.toLocaleString('uz-UZ') || 0} so'm`} detail="Tasdiqlangan Bonus" color="#9b59b6" />
                 <StatCard icon={<FiTrendingUp/>} title="Jami So'rovlar" value={stats.totalRequests?.toLocaleString() || 0} detail={`${stats.approvedRequests?.toLocaleString() || 0} tasdiqlangan`} color="#3498db" />
                 <StatCard icon={<FiUsers/>} title="Top Foydalanuvchi" value={`${Object.keys(stats.topUsers || {})[0] || 'N/A'}`} detail={`${Object.values(stats.topUsers || {})[0] || 0} so'rov bilan`} color="#fca130" />
             </div>
@@ -196,7 +171,6 @@ const DashboardPage = () => {
                         <Bar options={chartOptions('Platforma Bo\'yicha Moliya')} data={platformGraphData} />
                     </div>
                 </div>
-
                 <div className="sidebar-column">
                     <div className="chart-container-v2 donut-hero-chart">
                         <Doughnut data={statusChartData} options={donutChartOptions} />
