@@ -4,51 +4,38 @@ import apiService from './apiService';
 
 const API_URL = '/lottery';
 
-// --- Prize Management (No Changes) ---
+// --- Prize Management & User Data ---
 const getPrizes = () => apiService.get(`${API_URL}/prizes`);
 const addPrize = (prizeData) => apiService.post(`${API_URL}/prizes`, prizeData);
 const deletePrize = (id) => apiService.delete(`${API_URL}/prizes/${id}`);
-
-// --- User Data ---
 const getUserBalance = (chatId) => apiService.get(`${API_URL}/balance/${chatId}`);
-
-// 👇 --- ADD THE NEW FUNCTIONS HERE --- 👇
-
-/**
- * Awards a specified number of tickets to a user.
- * @param {number} chatId The user's chat ID.
- * @param {number} amount The number of tickets to award.
- * @returns {Promise} A promise that resolves to the user's updated balance.
- */
-const addTickets = (chatId, amount) => {
-    // The amount is sent as a request parameter, not in the body
-    return apiService.post(`${API_URL}/tickets/${chatId}`, null, {
-        params: { amount }
-    });
-};
-
-/**
- * Resets a user's ticket count to 0.
- * @param {number} chatId The user's chat ID.
- * @returns {Promise}
- */
+const addTickets = (chatId, amount) => apiService.post(`${API_URL}/tickets/${chatId}`, null, { params: { amount } });
 const resetTickets = (chatId) => apiService.delete(`${API_URL}/tickets/${chatId}`);
-
-/**
- * Resets a user's balance to 0.
- * @param {number} chatId The user's chat ID.
- * @returns {Promise}
- */
 const resetBalance = (chatId) => apiService.delete(`${API_URL}/balance/${chatId}`);
 
+/**
+ * Awards a specified amount of MONEY to a random selection of users.
+ * @param {object} awardData - Contains totalUsers, randomUsers, and amount.
+ * @returns {Promise}
+ */
+const awardRandomUsers = ({ totalUsers, randomUsers, amount }) => {
+    // Corrected URL: /lottery/award-random-users
+    return apiService.post(`${API_URL}/award-random-users`, null, {
+        params: {
+            totalUsers,
+            randomUsers,
+            amount
+        }
+    });
+};
 
 export const lotteryService = {
     getPrizes,
     addPrize,
     deletePrize,
     getUserBalance,
-    // Export the new functions
     addTickets,
     resetTickets,
     resetBalance,
+    awardRandomUsers, // Export the new function
 };

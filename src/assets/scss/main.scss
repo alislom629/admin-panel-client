@@ -2700,3 +2700,50 @@ hr {
     gap: 1rem;
   }
 }
+// src/styles/main.scss
+
+// ... (all existing styles for .lottery-page, etc.)
+
+// ===============================================
+// Styles for NEW Random Award Panel
+// ===============================================
+.lottery-page {
+
+  .full-width-panel {
+    // This makes the panel span the entire width of the grid
+    grid-column: 1 / -1;
+
+    .panel-description {
+      color: $text-secondary;
+      font-size: 0.9rem;
+      margin-top: -1rem;
+      margin-bottom: 1.5rem;
+      max-width: 700px;
+    }
+  }
+
+  .random-award-form {
+    display: grid;
+    // Creates a responsive grid for the form inputs
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    align-items: flex-end; // Aligns the button nicely with the inputs
+
+    .submit-group {
+      // The button will also take up one grid cell
+      .btn {
+        width: 100%; // Make the button fill its container
+      }
+    }
+  }
+
+  // A style for success messages
+  .success-message {
+    color: $secondary-color;
+    background-color: rgba($secondary-color, 0.1);
+    padding: 1rem;
+    border-radius: $border-radius;
+    border-left: 4px solid $secondary-color;
+    margin-bottom: 1rem; // Space it out
+  }
+}
