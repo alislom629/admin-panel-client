@@ -1,0 +1,234 @@
+// src/styles/HumoService.scss
+// Telegram-inspired color palette
+$telegram-blue: #0088cc;
+$telegram-white: #ffffff;
+$telegram-gray: #8696a0;
+$telegram-text: #000000;
+$telegram-accent: #40c4ff;
+$telegram-error: #ff3b30;
+$telegram-success: #00c853;
+
+// Page container
+.page-container.main-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: $telegram-white;
+  min-height: 100vh;
+}
+
+// Page header
+.page-header {
+  text-align: center;
+  margin-bottom: 30px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: $telegram-text;
+    margin: 0;
+  }
+}
+
+// Notification styles
+.notification {
+  position: relative;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: opacity 0.3s ease;
+
+  &.success {
+    background-color: rgba($telegram-success, 0.1);
+    color: $telegram-success;
+    border: 1px solid $telegram-success;
+  }
+
+  &.error {
+    background-color: rgba($telegram-error, 0.1);
+    color: $telegram-error;
+    border: 1px solid $telegram-error;
+  }
+
+  .notification-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    font-size: 18px;
+    padding: 5px;
+  }
+}
+
+// Form styles
+.login-form-panel {
+  background-color: $telegram-white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .form__group {
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-size: 14px;
+        font-weight: 500;
+        color: $telegram-text;
+        margin-bottom: 8px;
+      }
+
+      input {
+        padding: 12px;
+        border: 1px solid $telegram-gray;
+        border-radius: 8px;
+        font-size: 16px;
+        color: $telegram-text;
+        outline: none;
+        transition: border-color 0.2s ease;
+
+        &:focus {
+          border-color: $telegram-blue;
+        }
+
+        &::placeholder {
+          color: $telegram-gray;
+        }
+      }
+    }
+  }
+}
+
+// Account item styles
+.account-item {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(145deg, $telegram-white, #f5f7fa);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+}
+
+.account-profile-pic {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid $telegram-blue;
+  margin-right: 25px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 600px) {
+    width: 50px;
+    height: 50px;
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+}
+
+.account-details {
+  flex: 1;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: $telegram-text;
+    margin: 0 0 8px 0;
+  }
+
+  p {
+    font-size: 15px;
+    color: $telegram-gray;
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: attr(data-label);
+      font-weight: 500;
+      color: $telegram-text;
+      margin-right: 8px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    h2 {
+      font-size: 18px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+// Button styles (assuming Button component uses these classes)
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+
+  &.primary {
+    background-color: $telegram-blue;
+    color: $telegram-white;
+
+    &:hover {
+      background-color: darken($telegram-blue, 10%);
+      transform: scale(1.02);
+    }
+
+    &:disabled {
+      background-color: $telegram-gray;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Loader styles (assuming Loader component uses these)
+.loader {
+  border: 3px solid $telegram-gray;
+  border-top: 3px solid $telegram-blue;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

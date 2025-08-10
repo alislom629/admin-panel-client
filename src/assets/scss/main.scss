@@ -1,17 +1,25 @@
 // 1. Variables and Mixins
-@import 'variables';
-@import 'mixins';
+@import "variables";
+@import "mixins";
 
 // 2. Base and Global Styles
-@import 'base';
+@import "base";
 
 // 3. Component Styles
-@import 'components/Button';
-@import 'components/Navbar';
-@import 'components/Form';
-@import 'components/Modal';
-@import 'components/Loader';
-@import 'components/Card';
+@import "components/Button";
+@import "components/Navbar";
+@import "components/Form";
+@import "components/Modal";
+@import "components/Loader";
+@import "components/Card";
+
+$telegram-blue: #0088cc;
+$telegram-bg: #e6ecf0;
+$telegram-white: #ffffff;
+$telegram-text: #000000;
+$telegram-gray: #999999;
+$telegram-error: #d32f2f;
+$telegram-success: #4caf50;
 
 // Page-specific styles
 .login-page {
@@ -74,7 +82,6 @@
   border-left: 4px solid $danger-color;
 }
 
-
 // ===============================================
 // Styles for Transactions Page (with bigger filters)
 // ===============================================
@@ -84,7 +91,7 @@
     padding: 1.5rem;
     border-radius: $border-radius;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   }
 
   .filter-grid {
@@ -96,7 +103,7 @@
     select {
       width: 100%;
       padding: 0.9rem 1rem; /* MODIFIED: Increased padding to make them taller */
-      font-size: 1rem;      /* MODIFIED: Slightly larger font */
+      font-size: 1rem; /* MODIFIED: Slightly larger font */
       border-radius: $border-radius;
       border: 1px solid $border-color;
       background-color: $bg-color;
@@ -193,10 +200,21 @@
     text-transform: uppercase;
     color: #fff;
 
-    &.status--approved { background-color: $secondary-color; }
-    &.status--pending, &.status--pending_sms, &.status--pending_admin, &.status--pending_payment { background-color: #fca130; }
-    &.status--canceled { background-color: #6c757d; }
-    &.status--failed { background-color: $danger-color; }
+    &.status--approved {
+      background-color: $secondary-color;
+    }
+    &.status--pending,
+    &.status--pending_sms,
+    &.status--pending_admin,
+    &.status--pending_payment {
+      background-color: #fca130;
+    }
+    &.status--canceled {
+      background-color: #6c757d;
+    }
+    &.status--failed {
+      background-color: $danger-color;
+    }
   }
 }
 // src/styles/main.scss
@@ -221,7 +239,7 @@
     background-color: $bg-light;
     padding: 2rem;
     border-radius: $border-radius;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -305,8 +323,10 @@
 // Styles for Login Devices Page
 // ===============================================
 .login-devices-page {
-  .transaction-table { // Reusing existing table styles
-    td:last-child { // Target the last column (User Agent)
+  .transaction-table {
+    // Reusing existing table styles
+    td:last-child {
+      // Target the last column (User Agent)
       word-break: break-all; // Break long strings
       max-width: 300px; // Prevent it from getting too wide
     }
@@ -467,7 +487,7 @@
   background-color: $bg-light;
   padding: 2.5rem;
   border-radius: $border-radius;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 
   @include mobile {
     padding: 1.5rem;
@@ -549,7 +569,7 @@
       }
 
       span {
-        font-family: 'Courier New', Courier, monospace;
+        font-family: "Courier New", Courier, monospace;
         letter-spacing: 1.5px;
       }
     }
@@ -595,11 +615,11 @@
     width: 225px;
     padding: 10px 0;
     background-color: $primary-color;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     color: #fff;
     font-size: 0.8rem;
     font-weight: 700;
-    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     text-transform: uppercase;
     text-align: center;
     // Positioning and rotation
@@ -622,11 +642,11 @@
     width: 225px;
     padding: 10px 0;
     background-color: $primary-color;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     color: #fff;
     font-size: 0.8rem;
     font-weight: 700;
-    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     text-transform: uppercase;
     text-align: center;
     // Positioning and rotation
@@ -695,8 +715,12 @@
 
   .status-icon {
     font-size: 1.2rem;
-    &.enabled { color: $secondary-color; }
-    &.disabled { color: $text-secondary; }
+    &.enabled {
+      color: $secondary-color;
+    }
+    &.disabled {
+      color: $text-secondary;
+    }
   }
 
   .delete-btn {
@@ -741,7 +765,7 @@
     bottom: 0;
     background-color: #444; // Off state
     border-radius: 28px;
-    transition: .4s;
+    transition: 0.4s;
 
     &::before {
       position: absolute;
@@ -752,7 +776,7 @@
       bottom: 4px;
       background-color: white;
       border-radius: 50%;
-      transition: .4s;
+      transition: 0.4s;
     }
   }
 
@@ -931,7 +955,7 @@ select {
       font-weight: 600;
       color: $text-primary;
       font-size: 1.2rem;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: "Courier New", Courier, monospace;
     }
   }
 
@@ -943,8 +967,12 @@ select {
 
   .status-icon {
     font-size: 1.2rem;
-    &.enabled { color: $secondary-color; }
-    &.disabled { color: $text-secondary; }
+    &.enabled {
+      color: $secondary-color;
+    }
+    &.disabled {
+      color: $text-secondary;
+    }
   }
 
   .delete-btn {
@@ -968,7 +996,6 @@ select {
 // Styles for Transactions Page (with MOBILE FIX)
 // ===============================================
 .transactions-page {
-
   // NEW: The button to open filters on mobile. Hidden on desktop.
   .mobile-filter-toggle {
     display: none; // Hidden by default on larger screens
@@ -993,7 +1020,8 @@ select {
     margin-bottom: 2rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     // Add transition for smooth open/close on mobile
-    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out, margin 0.4s ease-in-out;
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out,
+      margin 0.4s ease-in-out;
   }
 
   // The grid of select inputs
@@ -1180,7 +1208,8 @@ select {
   position: relative;
 
   // Parol inputi o'ng tomondan ikonka uchun joy qoldirishi kerak
-  input[type="password"], input[type="text"] {
+  input[type="password"],
+  input[type="text"] {
     // Agar inputda allaqachon padding-right bo'lsa, uni oshiring, aks holda yangisini qo'shing
     padding-right: 40px;
   }
@@ -1243,12 +1272,12 @@ select {
     display: flex;
     flex-direction: column;
     overflow: hidden; // Ensures border-radius is respected by children
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 
     &:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     }
 
     &__header {
@@ -1381,7 +1410,6 @@ select {
 // Styles for Lottery Page (o'zgarishlar)
 // ===============================================
 .lottery-page {
-
   // ... (mavjud .lottery-page stillari) ...
 
   // YANGI STATISTIKA KARTASI UCHUN STIL
@@ -1441,53 +1469,127 @@ select {
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
-    h1 { color: $text-primary; }
+    h1 {
+      color: $text-primary;
+    }
   }
   .filter-controls {
-    display: flex; gap: 0.5rem; background-color: $bg-light; padding: 0.5rem; border-radius: $border-radius;
-    button, .custom-datepicker {
-      background: transparent; border: none; color: $text-secondary; padding: 0.6rem 1rem;
-      border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;
-      font-family: inherit; font-size: 0.9rem;
-      &:hover { color: $text-primary; background-color: $bg-lighter; }
-      &.active { background-color: $primary-color; color: #fff; }
+    display: flex;
+    gap: 0.5rem;
+    background-color: $bg-light;
+    padding: 0.5rem;
+    border-radius: $border-radius;
+    button,
+    .custom-datepicker {
+      background: transparent;
+      border: none;
+      color: $text-secondary;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      font-size: 0.9rem;
+      &:hover {
+        color: $text-primary;
+        background-color: $bg-lighter;
+      }
+      &.active {
+        background-color: $primary-color;
+        color: #fff;
+      }
     }
   }
 
   // FIXED Datepicker Styles
   .custom-datepicker {
-    background-color: transparent !important; text-align: center; width: 160px;
-    &::placeholder { color: $text-secondary; }
+    background-color: transparent !important;
+    text-align: center;
+    width: 160px;
+    &::placeholder {
+      color: $text-secondary;
+    }
   }
-  .react-datepicker-popper { z-index: 10; }
-  .react-datepicker__triangle { display: none; }
+  .react-datepicker-popper {
+    z-index: 10;
+  }
+  .react-datepicker__triangle {
+    display: none;
+  }
   .react-datepicker {
-    background-color: $bg-light !important; border: 1px solid $border-color !important; font-family: $font-family !important;
+    background-color: $bg-light !important;
+    border: 1px solid $border-color !important;
+    font-family: $font-family !important;
   }
   .react-datepicker__header {
-    background-color: $bg-lighter !important; border-bottom: 1px solid $border-color !important;
+    background-color: $bg-lighter !important;
+    border-bottom: 1px solid $border-color !important;
   }
-  .react-datepicker__navigation-arrow { margin-top: 5px !important; }
-  .react-datepicker__current-month, .react-datepicker__day-name, .react-datepicker__day {
+  .react-datepicker__navigation-arrow {
+    margin-top: 5px !important;
+  }
+  .react-datepicker__current-month,
+  .react-datepicker__day-name,
+  .react-datepicker__day {
     color: $text-primary !important;
   }
-  .react-datepicker__day:hover { background-color: $bg-lighter !important; }
-  .react-datepicker__day--disabled { color: #666 !important; }
-  .react-datepicker__day--selected, .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range {
+  .react-datepicker__day:hover {
+    background-color: $bg-lighter !important;
+  }
+  .react-datepicker__day--disabled {
+    color: #666 !important;
+  }
+  .react-datepicker__day--selected,
+  .react-datepicker__day--in-selecting-range,
+  .react-datepicker__day--in-range {
     background-color: $primary-color !important;
   }
 
   // Stat Card Styles
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
   .stat-card-v2 {
-    background-color: $bg-light; padding: 1.5rem; border-radius: $border-radius; display: flex;
-    gap: 1rem; border-bottom: 4px solid; transition: all 0.2s ease;
-    &:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25); }
-    &__icon { font-size: 2.5rem; align-self: center; }
-    &__info { display: flex; flex-direction: column; justify-content: center; }
-    &__title { color: $text-secondary; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    &__value { color: $text-primary; font-size: 2rem; font-weight: 700; line-height: 1.2; }
-    &__detail { color: $text-secondary; font-size: 0.85rem; }
+    background-color: $bg-light;
+    padding: 1.5rem;
+    border-radius: $border-radius;
+    display: flex;
+    gap: 1rem;
+    border-bottom: 4px solid;
+    transition: all 0.2s ease;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+    }
+    &__icon {
+      font-size: 2.5rem;
+      align-self: center;
+    }
+    &__info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    &__title {
+      color: $text-secondary;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    &__value {
+      color: $text-primary;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    &__detail {
+      color: $text-secondary;
+      font-size: 0.85rem;
+    }
   }
 
   // Main Layout Grid
@@ -1500,7 +1602,8 @@ select {
     }
   }
 
-  .main-column, .sidebar-column {
+  .main-column,
+  .sidebar-column {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -1515,8 +1618,12 @@ select {
     flex-direction: column;
   }
 
-  .area-chart { height: 400px; }
-  .stacked-bar-chart { height: 400px; }
+  .area-chart {
+    height: 400px;
+  }
+  .stacked-bar-chart {
+    height: 400px;
+  }
 
   // The "Hero" Donut Chart
   .donut-hero-chart {
@@ -1527,16 +1634,42 @@ select {
 
   // Table Styles
   .table-container-v2 {
-    background-color: $bg-light; padding: 1.5rem; border-radius: $border-radius;
-    display: flex; flex-direction: column;
-    h3 { margin: 0 0 1rem 0; color: $text-primary; }
-    .table-wrapper { overflow-y: auto; flex-grow: 1; max-height: 250px; } // Set max-height for scrolling
+    background-color: $bg-light;
+    padding: 1.5rem;
+    border-radius: $border-radius;
+    display: flex;
+    flex-direction: column;
+    h3 {
+      margin: 0 0 1rem 0;
+      color: $text-primary;
+    }
+    .table-wrapper {
+      overflow-y: auto;
+      flex-grow: 1;
+      max-height: 250px;
+    } // Set max-height for scrolling
     table {
-      width: 100%; border-collapse: collapse; font-size: 0.9rem;
-      th { text-align: left; padding: 0.75rem; color: $text-secondary; border-bottom: 2px solid $border-color; font-weight: 600; }
-      td { padding: 0.75rem; border-bottom: 1px solid $border-color; color: $text-primary; }
-      tbody tr:last-child td { border-bottom: none; }
-      tbody tr:hover { background-color: $bg-lighter; }
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      th {
+        text-align: left;
+        padding: 0.75rem;
+        color: $text-secondary;
+        border-bottom: 2px solid $border-color;
+        font-weight: 600;
+      }
+      td {
+        padding: 0.75rem;
+        border-bottom: 1px solid $border-color;
+        color: $text-primary;
+      }
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      tbody tr:hover {
+        background-color: $bg-lighter;
+      }
     }
   }
 }
@@ -1562,53 +1695,127 @@ select {
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
-    h1 { color: $text-primary; }
+    h1 {
+      color: $text-primary;
+    }
   }
   .filter-controls {
-    display: flex; gap: 0.5rem; background-color: $bg-light; padding: 0.5rem; border-radius: $border-radius;
-    button, .custom-datepicker {
-      background: transparent; border: none; color: $text-secondary; padding: 0.6rem 1rem;
-      border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;
-      font-family: inherit; font-size: 0.9rem;
-      &:hover { color: $text-primary; background-color: $bg-lighter; }
-      &.active { background-color: $primary-color; color: #fff; }
+    display: flex;
+    gap: 0.5rem;
+    background-color: $bg-light;
+    padding: 0.5rem;
+    border-radius: $border-radius;
+    button,
+    .custom-datepicker {
+      background: transparent;
+      border: none;
+      color: $text-secondary;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      font-size: 0.9rem;
+      &:hover {
+        color: $text-primary;
+        background-color: $bg-lighter;
+      }
+      &.active {
+        background-color: $primary-color;
+        color: #fff;
+      }
     }
   }
 
   // Datepicker Styles
   .custom-datepicker {
-    background-color: transparent !important; text-align: center; width: 160px;
-    &::placeholder { color: $text-secondary; }
+    background-color: transparent !important;
+    text-align: center;
+    width: 160px;
+    &::placeholder {
+      color: $text-secondary;
+    }
   }
-  .react-datepicker-popper { z-index: 10; }
-  .react-datepicker__triangle { display: none; }
+  .react-datepicker-popper {
+    z-index: 10;
+  }
+  .react-datepicker__triangle {
+    display: none;
+  }
   .react-datepicker {
-    background-color: $bg-light !important; border: 1px solid $border-color !important; font-family: $font-family !important;
+    background-color: $bg-light !important;
+    border: 1px solid $border-color !important;
+    font-family: $font-family !important;
   }
   .react-datepicker__header {
-    background-color: $bg-lighter !important; border-bottom: 1px solid $border-color !important;
+    background-color: $bg-lighter !important;
+    border-bottom: 1px solid $border-color !important;
   }
-  .react-datepicker__navigation-arrow { margin-top: 5px !important; }
-  .react-datepicker__current-month, .react-datepicker__day-name, .react-datepicker__day {
+  .react-datepicker__navigation-arrow {
+    margin-top: 5px !important;
+  }
+  .react-datepicker__current-month,
+  .react-datepicker__day-name,
+  .react-datepicker__day {
     color: $text-primary !important;
   }
-  .react-datepicker__day:hover { background-color: $bg-lighter !important; }
-  .react-datepicker__day--disabled { color: #666 !important; }
-  .react-datepicker__day--selected, .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range {
+  .react-datepicker__day:hover {
+    background-color: $bg-lighter !important;
+  }
+  .react-datepicker__day--disabled {
+    color: #666 !important;
+  }
+  .react-datepicker__day--selected,
+  .react-datepicker__day--in-selecting-range,
+  .react-datepicker__day--in-range {
     background-color: $primary-color !important;
   }
 
   // Stat Card Styles
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
   .stat-card-v2 {
-    background-color: $bg-light; padding: 1.5rem; border-radius: $border-radius; display: flex;
-    gap: 1rem; border-bottom: 4px solid; transition: all 0.2s ease;
-    &:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25); }
-    &__icon { font-size: 2.5rem; align-self: center; }
-    &__info { display: flex; flex-direction: column; justify-content: center; }
-    &__title { color: $text-secondary; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    &__value { color: $text-primary; font-size: 2rem; font-weight: 700; line-height: 1.2; }
-    &__detail { color: $text-secondary; font-size: 0.85rem; }
+    background-color: $bg-light;
+    padding: 1.5rem;
+    border-radius: $border-radius;
+    display: flex;
+    gap: 1rem;
+    border-bottom: 4px solid;
+    transition: all 0.2s ease;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+    }
+    &__icon {
+      font-size: 2.5rem;
+      align-self: center;
+    }
+    &__info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    &__title {
+      color: $text-secondary;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    &__value {
+      color: $text-primary;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    &__detail {
+      color: $text-secondary;
+      font-size: 0.85rem;
+    }
   }
 
   // Main Layout Grid (Desktop)
@@ -1617,21 +1824,24 @@ select {
     grid-template-columns: 2fr 1.2fr;
     gap: 1.5rem;
   }
-  .main-column, .sidebar-column {
+  .main-column,
+  .sidebar-column {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
   }
 
   // General Chart & Table Container Styles (Desktop)
-  .chart-container-v2, .table-container-v2 {
+  .chart-container-v2,
+  .table-container-v2 {
     background-color: $bg-light;
     padding: 1.5rem 2rem;
     border-radius: $border-radius;
     display: flex;
     flex-direction: column;
   }
-  .area-chart, .stacked-bar-chart {
+  .area-chart,
+  .stacked-bar-chart {
     height: 400px;
   }
   .donut-hero-chart {
@@ -1640,17 +1850,39 @@ select {
     justify-content: center;
   }
   .table-container-v2 {
-    h3 { margin: 0 0 1rem 0; color: $text-primary; }
-    .table-wrapper { overflow-y: auto; flex-grow: 1; max-height: 250px; }
+    h3 {
+      margin: 0 0 1rem 0;
+      color: $text-primary;
+    }
+    .table-wrapper {
+      overflow-y: auto;
+      flex-grow: 1;
+      max-height: 250px;
+    }
     table {
-      width: 100%; border-collapse: collapse; font-size: 0.9rem;
-      th { text-align: left; padding: 0.75rem; color: $text-secondary; border-bottom: 2px solid $border-color; font-weight: 600; }
-      td { padding: 0.75rem; border-bottom: 1px solid $border-color; color: $text-primary; }
-      tbody tr:last-child td { border-bottom: none; }
-      tbody tr:hover { background-color: $bg-lighter; }
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      th {
+        text-align: left;
+        padding: 0.75rem;
+        color: $text-secondary;
+        border-bottom: 2px solid $border-color;
+        font-weight: 600;
+      }
+      td {
+        padding: 0.75rem;
+        border-bottom: 1px solid $border-color;
+        color: $text-primary;
+      }
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      tbody tr:hover {
+        background-color: $bg-lighter;
+      }
     }
   }
-
 
   // --- 2. MOBILE-SPECIFIC STYLES ---
   // These styles will only apply on screens 768px or smaller
@@ -1694,12 +1926,14 @@ select {
     }
 
     // Adjust all chart and table containers
-    .chart-container-v2, .table-container-v2 {
+    .chart-container-v2,
+    .table-container-v2 {
       padding: 1rem;
     }
 
     // Adjust chart heights for mobile
-    .area-chart, .stacked-bar-chart {
+    .area-chart,
+    .stacked-bar-chart {
       height: 300px;
     }
     .donut-hero-chart {
@@ -1714,7 +1948,8 @@ select {
       }
       table {
         font-size: 0.85rem;
-        th, td {
+        th,
+        td {
           padding: 0.6rem;
         }
       }
@@ -1815,7 +2050,6 @@ hr {
 
 // ... (all your existing styles)
 
-
 // ===============================================
 // Styles for Cards Page Enhancements
 // ===============================================
@@ -1831,8 +2065,12 @@ hr {
 
 // Add a spinning animation for the sync icon
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 .spin {
   animation: spin 1s linear infinite;
@@ -2065,7 +2303,8 @@ hr {
   margin-top: 1.5rem; // Pushes it away from the body content
 
   // Ensure all buttons and links are styled consistently
-  .btn, a > .btn {
+  .btn,
+  a > .btn {
     flex-grow: 1; // Makes buttons share space nicely
     display: inline-flex;
     align-items: center;
@@ -2514,7 +2753,8 @@ hr {
       padding: 0.5rem;
       border-radius: $border-radius;
 
-      button, .custom-datepicker {
+      button,
+      .custom-datepicker {
         background: transparent;
         border: none;
         color: $text-secondary;
@@ -2524,7 +2764,8 @@ hr {
         font-weight: 600;
         transition: all 0.2s ease-in-out;
 
-        &.active, &:hover {
+        &.active,
+        &:hover {
           background-color: $primary-color;
           color: #fff;
         }
@@ -2557,7 +2798,7 @@ hr {
 
     &:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
 
     &__icon {
@@ -2600,7 +2841,8 @@ hr {
     }
   }
 
-  .main-column, .sidebar-column {
+  .main-column,
+  .sidebar-column {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -2612,9 +2854,15 @@ hr {
     border-radius: $border-radius;
     height: 350px;
 
-    &.area-chart { height: 300px; }
-    &.stacked-bar-chart { height: 410px; }
-    &.donut-hero-chart { height: 400px; }
+    &.area-chart {
+      height: 300px;
+    }
+    &.stacked-bar-chart {
+      height: 410px;
+    }
+    &.donut-hero-chart {
+      height: 400px;
+    }
   }
 
   .table-container-v2 {
@@ -2636,7 +2884,8 @@ hr {
       width: 100%;
       border-collapse: collapse;
 
-      th, td {
+      th,
+      td {
         padding: 0.75rem;
         text-align: left;
       }
@@ -2708,7 +2957,6 @@ hr {
 // Styles for NEW Random Award Panel
 // ===============================================
 .lottery-page {
-
   .full-width-panel {
     // This makes the panel span the entire width of the grid
     grid-column: 1 / -1;
@@ -2745,5 +2993,88 @@ hr {
     border-radius: $border-radius;
     border-left: 4px solid $secondary-color;
     margin-bottom: 1rem; // Space it out
+  }
+}
+
+.just-flex {
+  display: flex;
+}
+
+// --- TELEGRAM LOGIN ---
+
+// --- TELEGRAM LOGIN ---
+
+// src/styles/HumoService.scss (add to existing SCSS)
+
+.account-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  background-color: transparent;
+  background-color: #16213e;
+
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+}
+
+.account-profile-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+
+  @media (max-width: 600px) {
+    width: 50px;
+    height: 50px;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+.account-details {
+  flex: 1;
+
+  h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+  }
+
+  p {
+    font-size: 14px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    span {
+      margin-left: 2px;
+      color: rgb(97, 203, 97);
+    }
+  }
+
+  @media (max-width: 600px) {
+    h2 {
+      font-size: 16px;
+    }
+
+    p {
+      font-size: 13px;
+    }
   }
 }
