@@ -17,6 +17,9 @@ import {
   FiServer,
 } from "react-icons/fi";
 
+import HumoLogo from "../assets/humo.webp";
+import UzcardLogo from "../assets/uzcard.png";
+
 const CardsPage = () => {
   // State for data
   const [cards, setCards] = useState([]);
@@ -176,6 +179,17 @@ const CardsPage = () => {
                   <span>Balance</span>
                   <p>{card.balance.toLocaleString("en-US")}</p>
                 </div>
+              </div>
+              <div className="card-info-item">
+                <div className="card-info-text">
+                  <span>Karta turi</span>
+                  <p>{card.paymentSystem}</p>
+                </div>
+                <img
+                  className="cardType"
+                  src={card.paymentSystem === "HUMO" ? HumoLogo : UzcardLogo}
+                  alt=""
+                />
               </div>
             </div>
 

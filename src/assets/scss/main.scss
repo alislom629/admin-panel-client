@@ -2347,6 +2347,15 @@ hr {
     border-color: $primary-color;
   }
 
+  .cardType {
+    // position: absolute;
+    // left: 20%;
+    // top: 25%;
+
+    width: 80px;
+    height: 80px;
+  }
+
   // 3. Highlight style for cards belonging to the PRIMARY Oson account
   &.primary-account {
     border-color: $secondary-color;
