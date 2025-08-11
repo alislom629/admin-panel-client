@@ -1,5 +1,3 @@
-// src/pages/DashboardPage.js
-
 import React, { useState, useEffect } from "react";
 import { dashboardService } from "../api/dashboardService";
 import Loader from "../components/common/Loader";
@@ -23,7 +21,7 @@ import {
 } from "chart.js";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
 
-// 1. IMPORT the new 'FiAward' icon for the bonus card
+// Import icons
 import {
   FiTrendingUp,
   FiArrowUpCircle,
@@ -32,7 +30,7 @@ import {
   FiAward,
 } from "react-icons/fi";
 
-// Register all the Chart.js components we'll use
+// Register Chart.js components
 ChartJS.register(
   ArcElement,
   Tooltip,
@@ -46,7 +44,7 @@ ChartJS.register(
   Title
 );
 
-// Reusable Stat Card component (no changes needed here)
+// Reusable Stat Card component
 const StatCard = ({ icon, title, value, detail, color }) => (
   <div className="stat-card-v2" style={{ borderBottomColor: color }}>
     <div className="stat-card-v2__icon" style={{ color }}>
@@ -64,6 +62,7 @@ const DashboardPage = () => {
   const [stats, setStats] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [toggleState, setToggleState] = useState(false);
 
   // Date filter state
   const [filterPeriod, setFilterPeriod] = useState("30d");
@@ -89,16 +88,14 @@ const DashboardPage = () => {
       }
 
       try {
-        // 2. FETCH BOTH STATS AND BONUS AMOUNT IN PARALLEL
         const [statsResponse, bonusResponse] = await Promise.all([
           dashboardService.getDashboardStats(params),
           dashboardService.getTotalApprovedBonusAmount(params),
         ]);
 
-        // 3. COMBINE THE RESULTS INTO ONE OBJECT
         const combinedStats = {
-          ...statsResponse.data, // All data from the main stats endpoint
-          totalApprovedBonusAmount: bonusResponse.data, // Add the bonus amount
+          ...statsResponse.data,
+          totalApprovedBonusAmount: bonusResponse.data,
         };
 
         setStats(combinedStats);
@@ -113,12 +110,61 @@ const DashboardPage = () => {
     fetchData();
   }, [filterPeriod, dateRange]);
 
+  const getToggles = async () => {
+    setIsLoading(true);
+    try {
+      const res = await dashboardService.GetToggles(); // query param
+
+      console.log("RESINNER", res);
+
+      // axios returns { data: ... }
+      // setAccounts(res.data ?? []);
+    } catch (err) {
+      console.error("toggle  error:", err);
+      // setNotificationError(
+      //   err.response?.data?.detail || err.message || "Noma'lum xato"
+      // );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    (async () => {
+      const toggles = await dashboardService.GetToggles();
+
+      console.log("togglestoggles", toggles);
+
+      setToggleState(toggles);
+    })();
+  }, []);
+
+  const changeTogle = async (key, value) => {
+    // topUpEnabled,withdrawEnabled,bonusEnabled
+
+    setIsLoading(1);
+    let res;
+    if (key === "topUpEnabled") {
+      res = await dashboardService?.ToggleController?.toggleTopUp(!value);
+    } else if (key === "withdrawEnabled") {
+      res = await dashboardService?.ToggleController?.toggleWithdraw(!value);
+    } else if (key === "bonusEnabled") {
+      res = await dashboardService?.ToggleController?.toggleBonus(!value);
+    }
+    const toggles = await dashboardService.GetToggles();
+
+    console.log("togglestoggles", toggles);
+    console.log("togglestogglesRes", res);
+
+    setToggleState(toggles);
+    setIsLoading(0);
+  };
+
   const handleFilterChange = (period) => {
     setFilterPeriod(period);
     if (period !== "custom") setDateRange([null, null]);
   };
 
-  // --- Chart Configurations (no changes needed) ---
+  // Chart Configurations
   const requestsByDateChartData = {
     labels: stats?.requestsByDate
       ? Object.keys(stats.requestsByDate).sort()
@@ -241,6 +287,53 @@ const DashboardPage = () => {
 
   return (
     <div className="page-container dashboard-v2">
+      <div className="ToggleContainer">
+        <div className="toggle-element">
+          <p>Bonus:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${
+                toggleState.bonusEnabled ? "on" : "off"
+              }`}
+              onClick={() =>
+                changeTogle("bonusEnabled", toggleState.bonusEnabled)
+              }
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+        <div className="toggle-element">
+          <p>Pul yechish:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${
+                toggleState.withdrawEnabled ? "on" : "off"
+              }`}
+              onClick={() =>
+                changeTogle("withdrawEnabled", toggleState.withdrawEnabled)
+              }
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+        <div className="toggle-element">
+          <p>To'ldirish:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${
+                toggleState.topUpEnabled ? "on" : "off"
+              }`}
+              onClick={() =>
+                changeTogle("topUpEnabled", toggleState.topUpEnabled)
+              }
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+      </div>
       <header className="dashboard-header">
         <h1>Boshqaruv Paneli</h1>
         <div className="filter-controls">
@@ -278,8 +371,6 @@ const DashboardPage = () => {
           />
         </div>
       </header>
-
-      {/* 4. ADD THE NEW BONUS CARD TO THE GRID */}
       <div className="stats-grid">
         <StatCard
           icon={<FiArrowDownCircle />}
@@ -325,7 +416,6 @@ const DashboardPage = () => {
           color="#fca130"
         />
       </div>
-
       <div className="dashboard-main-content-grid">
         <div className="main-column">
           <div className="chart-container-v2 area-chart">
